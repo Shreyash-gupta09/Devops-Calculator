@@ -1,0 +1,19 @@
+---
+- name: Deploy Calculator Locally
+  hosts: local
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Pull the latest calculator image
+      command: docker pull shreyash0901/calculator:latest
+
+    - name: Stop and remove existing container (if any)
+      command: docker rm -f calculator
+      ignore_errors: yes
+
+    - name: Run the calculator container
+      command: docker run -it -d --name calculator -p 5000:5000 shreyash0901/calculator:latest
